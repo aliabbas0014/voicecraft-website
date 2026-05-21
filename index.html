@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoiceCraft — Pronunciation & Communication Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;0,900;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c28;
+    --border: #2a2a3a;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --accent4: #f7971e;
+    --text: #e8e8f0;
+    --text2: #9090a8;
+    --text3: #5a5a72;
+    --glow: rgba(108, 99, 255, 0.15);
+  }
+  .light {
+    --bg: #f5f4ff;
+    --surface: #ffffff;
+    --surface2: #ededfa;
+    --border: #ddddf5;
+    --text: #18182a;
+    --text2: #5a5a72;
+    --text3: #9090a8;
+    --glow: rgba(108, 99, 255, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .logo span { font-style: italic; font-weight: 300; }
+  nav { display: flex; gap: 4px; }
+  nav button {
+    background: none; border: none; cursor: pointer;
+    padding: 8px 16px; border-radius: 8px;
+    color: var(--text2); font-size: 0.875rem; font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  nav button:hover { background: var(--surface2); color: var(--text); }
+  nav button.active {
+    background: var(--glow); color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .theme-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 10px; cursor: pointer;
+    color: var(--text2); font-size: 1rem; transition: all 0.2s;
+  }
+  .theme-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── PAGES ── */
+  .page { display: none; animation: fadeUp 0.4s ease; }
+  .page.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 24px 48px;
+    text-align: center;
+    max-width: 800px; margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--glow); border: 1px solid var(--accent);
+    border-radius: 100px; padding: 4px 14px;
+    font-size: 0.78rem; color: var(--accent); font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900; line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .hero h1 em {
+    font-style: italic; font-weight: 300;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    color: var(--text2); font-size: 1.1rem; line-height: 1.7;
+    max-width: 600px; margin: 0 auto 36px;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.25s;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 4px 20px rgba(108,99,255,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(108,99,255,0.5); }
+  .btn-secondary {
+    background: var(--surface2); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-ghost { background: none; color: var(--accent); padding: 8px 12px; }
+  .btn-ghost:hover { background: var(--glow); }
+  .btn-icon {
+    width: 42px; height: 42px; padding: 0;
+    border-radius: 50%; justify-content: center;
+    background: var(--accent); color: #fff;
+    box-shadow: 0 2px 12px rgba(108,99,255,0.4);
+    font-size: 1.1rem;
+  }
+  .btn-icon:hover { transform: scale(1.1); }
+  .btn-icon.red { background: var(--accent2); box-shadow: 0 2px 12px rgba(255,101,132,0.4); }
+  .btn-icon.green { background: var(--accent3); color: #000; box-shadow: 0 2px 12px rgba(67,233,123,0.4); }
+
+  /* ── QUICK CARDS ── */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px; max-width: 900px; margin: 0 auto; padding: 0 24px 48px;
+  }
+  .q-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px 20px;
+    cursor: pointer; transition: all 0.25s; text-align: left;
+  }
+  .q-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 32px var(--glow); }
+  .q-card .icon { font-size: 1.8rem; margin-bottom: 12px; }
+  .q-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+  .q-card p { font-size: 0.8rem; color: var(--text2); line-height: 1.5; }
+
+  /* ── MAIN CONTAINER ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem; font-weight: 700; margin-bottom: 8px;
+  }
+  .section-subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 28px; }
+
+  /* ── PRONUNCIATION CHECKER ── */
+  .checker-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px; margin-bottom: 24px;
+  }
+  .lang-toggle {
+    display: flex; gap: 8px; margin-bottom: 20px;
+  }
+  .lang-btn {
+    padding: 6px 18px; border-radius: 100px;
+    border: 1px solid var(--border); background: none;
+    color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 500; transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  .input-row {
+    display: flex; gap: 12px; align-items: flex-end;
+  }
+  .word-input {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text);
+    outline: none; transition: border-color 0.2s;
+    resize: none;
+  }
+  .word-input:focus { border-color: var(--accent); }
+  .word-input::placeholder { color: var(--text3); }
+
+  .result-box {
+    margin-top: 20px; padding: 20px;
+    background: var(--surface2); border-radius: 14px;
+    border-left: 3px solid var(--accent);
+    display: none;
+  }
+  .result-box.show { display: block; animation: fadeUp 0.3s ease; }
+  .phonetic {
+    font-size: 1.6rem; font-family: 'Fraunces', serif;
+    color: var(--accent); font-style: italic; margin-bottom: 8px;
+  }
+  .syllables {
+    font-size: 0.85rem; color: var(--text2); margin-bottom: 12px;
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+  }
+  .meaning-text { font-size: 0.95rem; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+  .audio-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .speed-btns { display: flex; gap: 6px; }
+  .speed-btn {
+    padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border);
+    background: none; color: var(--text2); cursor: pointer;
+    font-size: 0.78rem; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .speed-btn.active, .speed-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .example-sentences { margin-top: 14px; }
+  .example-sentences h4 { font-size: 0.8rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .example-item {
+    padding: 8px 12px; background: var(--surface); border-radius: 8px;
+    margin-bottom: 6px; font-size: 0.88rem; color: var(--text2);
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+  }
+  .example-item:hover { color: var(--text); background: var(--glow); }
+
+  /* ── WAVE VISUALIZER ── */
+  .wave-container {
+    height: 60px; background: var(--surface2);
+    border-radius: 10px; overflow: hidden; margin: 12px 0;
+    display: flex; align-items: center; padding: 0 8px; gap: 2px;
+  }
+  .wave-bar {
+    flex: 1; background: var(--accent);
+    border-radius: 2px; transition: height 0.1s;
+    opacity: 0.7;
+  }
+
+  /* ── SPEECH PRACTICE ── */
+  .practice-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px; margin-bottom: 20px;
+  }
+  .mic-area {
+    text-align: center; padding: 32px 20px;
+  }
+  .big-mic {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; margin: 0 auto 20px; cursor: pointer;
+    box-shadow: 0 8px 32px rgba(108,99,255,0.4);
+    transition: all 0.3s; border: none;
+  }
+  .big-mic:hover { transform: scale(1.06); }
+  .big-mic.recording {
+    animation: pulse 1.2s infinite;
+    background: linear-gradient(135deg, var(--accent2), #ff0040);
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,101,132,0.5); }
+    50% { box-shadow: 0 0 0 20px rgba(255,101,132,0); }
+  }
+  .mic-label { color: var(--text2); font-size: 0.9rem; margin-bottom: 8px; }
+  .transcript-box {
+    min-height: 60px; background: var(--surface2);
+    border-radius: 12px; padding: 14px; margin: 16px 0;
+    font-size: 1rem; color: var(--text); line-height: 1.6;
+    font-style: italic; text-align: left;
+  }
+  .score-bar { margin: 10px 0; }
+  .score-label { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text2); margin-bottom: 6px; }
+  .bar-track { height: 8px; background: var(--surface2); border-radius: 100px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
+
+  /* ── DAILY PRACTICE ── */
+  .practice-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .practice-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px; cursor: pointer; transition: all 0.25s;
+  }
+  .practice-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .practice-item .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 100px;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 10px;
+  }
+  .tag-hard { background: rgba(255,101,132,0.15); color: var(--accent2); }
+  .tag-medium { background: rgba(247,151,30,0.15); color: var(--accent4); }
+  .tag-easy { background: rgba(67,233,123,0.15); color: var(--accent3); }
+  .practice-item h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .practice-item p { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
+  .practice-item .phonetic-small { font-family: 'Fraunces', serif; font-style: italic; color: var(--accent); font-size: 0.9rem; margin-top: 8px; }
+
+  /* ── DICTIONARY ── */
+  .dict-search-row { display: flex; gap: 12px; margin-bottom: 24px; }
+  .dict-result {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px; display: none;
+  }
+  .dict-result.show { display: block; animation: fadeUp 0.3s ease; }
+  .dict-word { font-family: 'Fraunces', serif; font-size: 2.5rem; font-weight: 700; }
+  .dict-phonetic { font-size: 1.1rem; color: var(--accent); font-family: 'Fraunces', serif; font-style: italic; margin: 4px 0 12px; }
+  .dict-pos { display: inline-block; padding: 3px 12px; background: var(--glow); border: 1px solid var(--accent); color: var(--accent); border-radius: 100px; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .dict-section { margin-top: 20px; }
+  .dict-section h4 { font-size: 0.8rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .dict-def { font-size: 0.95rem; color: var(--text2); line-height: 1.6; margin-bottom: 8px; padding-left: 12px; border-left: 2px solid var(--accent3); }
+  .dict-example { font-size: 0.9rem; color: var(--text2); font-style: italic; padding: 8px 12px; background: var(--surface2); border-radius: 8px; margin-bottom: 6px; }
+  .syllable-display { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .syllable {
+    padding: 4px 12px; background: var(--surface2);
+    border-radius: 6px; font-size: 0.9rem; font-weight: 600;
+    border: 1px solid var(--border);
+  }
+  .syllable.stressed { border-color: var(--accent); color: var(--accent); }
+
+  /* ── ACCENT EXERCISES ── */
+  .accent-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .accent-tab {
+    padding: 8px 20px; border-radius: 100px; border: 1px solid var(--border);
+    background: none; color: var(--text2); cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+    transition: all 0.2s;
+  }
+  .accent-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .exercise-list { display: flex; flex-direction: column; gap: 12px; }
+  .exercise-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .exercise-text h3 { font-size: 1rem; margin-bottom: 4px; }
+  .exercise-text p { font-size: 0.82rem; color: var(--text2); }
+  .exercise-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  /* ── COMPARE ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .compare-col {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px;
+  }
+  .compare-col h4 { font-size: 0.82rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .waveform-display {
+    height: 80px; background: var(--surface2); border-radius: 10px;
+    display: flex; align-items: center; padding: 0 12px; gap: 2px;
+    margin-bottom: 12px;
+  }
+  .wave-bar2 { flex: 1; background: var(--accent); border-radius: 2px; opacity: 0.8; }
+  .match-score {
+    text-align: center; margin-top: 16px;
+    font-family: 'Fraunces', serif; font-size: 3rem; font-weight: 700;
+    color: var(--accent3);
+  }
+  .match-label { text-align: center; color: var(--text2); font-size: 0.85rem; }
+
+  /* ── PROGRESS ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .stat-card .num { font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 700; }
+  .stat-card .lbl { font-size: 0.82rem; color: var(--text2); margin-top: 4px; }
+  .streak-fire { color: var(--accent4); }
+
+  /* ── FLOATING TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 12px; padding: 14px 20px;
+    font-size: 0.88rem; color: var(--text); max-width: 300px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    transform: translateY(100px); opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    header { padding: 0 16px; }
+    nav button { padding: 6px 10px; font-size: 0.78rem; }
+    .hero { padding: 48px 16px 32px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .input-row { flex-direction: column; }
+  }
+
+  /* ── LOADING DOTS ── */
+  .loading-dots { display: inline-flex; gap: 4px; }
+  .loading-dots span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); animation: dot-bounce 1.2s infinite;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot-bounce {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* ── BADGE CHIPS ── */
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 600;
+  }
+  .chip-accent { background: var(--glow); color: var(--accent); border: 1px solid rgba(108,99,255,0.3); }
+
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  #status-msg { color: var(--text2); font-size: 0.85rem; margin-top: 8px; min-height: 22px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Voice<span>Craft</span></div>
+  <nav>
+    <button class="active" onclick="showPage('home', this)">🏠 Home</button>
+    <button onclick="showPage('checker', this)">🔤 Checker</button>
+    <button onclick="showPage('practice', this)">🎙️ Practice</button>
+    <button onclick="showPage('dictionary', this)">📖 Dictionary</button>
+    <button onclick="showPage('exercises', this)">💪 Exercises</button>
+  </nav>
+  <div class="header-actions">
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════ HOME PAGE ═══════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-badge">✨ Your Personal Pronunciation Coach</div>
+    <h1>Speak with<br><em>Confidence</em> &amp; Clarity</h1>
+    <p>Master English and Urdu pronunciation, build communication skills, and transform how you speak — one word at a time.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="showPage('checker', document.querySelector('nav button:nth-child(2)'))">Start Checking ↗</button>
+      <button class="btn btn-secondary" onclick="showPage('practice', document.querySelector('nav button:nth-child(3)'))">🎙️ Practice Speaking</button>
+    </div>
+  </div>
+
+  <div class="quick-grid">
+    <div class="q-card" onclick="showPage('checker', document.querySelector('nav button:nth-child(2)'))">
+      <div class="icon">🔤</div>
+      <h3>Pronunciation Checker</h3>
+      <p>Type any word and instantly see &amp; hear the correct pronunciation with phonetics.</p>
+    </div>
+    <div class="q-card" onclick="showPage('practice', document.querySelector('nav button:nth-child(3)'))">
+      <div class="icon">🎙️</div>
+      <h3>Speech Practice</h3>
+      <p>Record your voice and compare it with the correct pronunciation in real time.</p>
+    </div>
+    <div class="q-card" onclick="showPage('dictionary', document.querySelector('nav button:nth-child(4)'))">
+      <div class="icon">📖</div>
+      <h3>Smart Dictionary</h3>
+      <p>Deep-dive into any word — meanings, syllables, examples, and audio playback.</p>
+    </div>
+    <div class="q-card" onclick="showPage('exercises', document.querySelector('nav button:nth-child(5)'))">
+      <div class="icon">💪</div>
+      <h3>Daily Exercises</h3>
+      <p>Tongue twisters, accent drills, and confidence-building speaking challenges.</p>
+    </div>
+    <div class="q-card" onclick="showPage('practice', document.querySelector('nav button:nth-child(3)'))">
+      <div class="icon">🧠</div>
+      <h3>Difficult Words</h3>
+      <p>Practice commonly mispronounced English words step by step.</p>
+    </div>
+    <div class="q-card" onclick="loadDailyWord()">
+      <div class="icon">📅</div>
+      <h3>Word of the Day</h3>
+      <p>Build vocabulary daily with a new word, its pronunciation, and meaning.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;" id="wotd-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <h2 class="section-title" style="margin-bottom:0;">📅 Word of the Day</h2>
+        <button class="btn btn-ghost" onclick="loadDailyWord()">Refresh ↻</button>
+      </div>
+      <div id="wotd-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CHECKER PAGE ═══════════════════════ -->
+<div class="page" id="page-checker">
+  <div class="container">
+    <h2 class="section-title">🔤 Pronunciation Checker</h2>
+    <p class="section-subtitle">Type any English or Urdu word, phrase, or sentence to hear the correct pronunciation.</p>
+
+    <div class="checker-card">
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
+        <button class="lang-btn" id="lang-ur" onclick="setLang('ur')">🇵🇰 اردو</button>
+      </div>
+      <div class="input-row">
+        <textarea class="word-input" id="checker-input" rows="3"
+          placeholder="Type a word or sentence here... (e.g. 'know', 'Wednesday', 'colonel')"></textarea>
+        <button class="btn btn-primary" onclick="checkPronunciation()">Check<br>Pronunciation</button>
+      </div>
+      <div id="status-msg"></div>
+
+      <div class="result-box" id="checker-result">
+        <div id="phonetic-display" class="phonetic"></div>
+        <div id="syllable-display" class="syllables"></div>
+        <div id="meaning-display" class="meaning-text"></div>
+        <div class="audio-controls">
+          <button class="btn btn-icon" onclick="speakText()" title="Play audio">▶</button>
+          <div class="speed-btns">
+            <button class="speed-btn active" onclick="setSpeed(1,this)">Normal</button>
+            <button class="speed-btn" onclick="setSpeed(0.6,this)">Slow 🐢</button>
+            <button class="speed-btn" onclick="setSpeed(0.4,this)">Very Slow</button>
+          </div>
+          <button class="btn btn-ghost" onclick="copyPhonetic()" title="Copy phonetic">📋 Copy</button>
+        </div>
+        <div class="wave-container" id="checker-wave">
+          <div id="wave-bars"></div>
+        </div>
+        <div class="example-sentences" id="example-section">
+          <h4>Example Sentences — click to hear</h4>
+          <div id="example-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="checker-card">
+      <h3 style="margin-bottom:16px;font-family:'Fraunces',serif;">🔥 Commonly Mispronounced Words</h3>
+      <div id="common-words" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PRACTICE PAGE ═══════════════════════ -->
+<div class="page" id="page-practice">
+  <div class="container">
+    <h2 class="section-title">🎙️ Speech Practice Studio</h2>
+    <p class="section-subtitle">Record your voice, compare with the correct pronunciation, and track your progress.</p>
+
+    <div class="practice-card">
+      <h3 style="margin-bottom:16px;font-family:'Fraunces',serif;">🎯 Sentence Practice</h3>
+      <div id="practice-sentence" style="font-size:1.2rem;font-weight:600;padding:16px;background:var(--surface2);border-radius:12px;margin-bottom:12px;line-height:1.6;"></div>
+      <div id="practice-phonetic" style="font-family:'Fraunces',serif;font-style:italic;color:var(--accent);font-size:1rem;margin-bottom:20px;"></div>
+
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" onclick="loadNewSentence()">New Sentence 🔀</button>
+        <button class="btn btn-secondary" onclick="speakPractice()">▶ Hear It</button>
+        <button class="btn btn-secondary" onclick="speakPracticeSlow()">🐢 Slow Version</button>
+      </div>
+
+      <div class="mic-area">
+        <p class="mic-label" id="mic-label">Tap to start recording your pronunciation</p>
+        <button class="big-mic" id="mic-btn" onclick="toggleRecording()">🎙️</button>
+        <div id="recording-timer" style="font-size:0.85rem;color:var(--accent);margin-top:8px;min-height:20px;"></div>
+      </div>
+
+      <div class="wave-container" id="record-wave" style="display:none;">
+        <div id="record-bars" style="display:flex;gap:2px;width:100%;height:100%;align-items:center;"></div>
+      </div>
+
+      <div class="transcript-box" id="transcript-box">Your speech will appear here as you speak...</div>
+
+      <div id="scores-section" style="display:none;">
+        <div class="score-bar">
+          <div class="score-label"><span>Pronunciation Accuracy</span><span id="score-acc">0%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="bar-acc" style="width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));"></div></div>
+        </div>
+        <div class="score-bar">
+          <div class="score-label"><span>Fluency</span><span id="score-flu">0%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="bar-flu" style="width:0%;background:linear-gradient(90deg,var(--accent3),#00b4db);"></div></div>
+        </div>
+        <div class="score-bar">
+          <div class="score-label"><span>Completeness</span><span id="score-com">0%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="bar-com" style="width:0%;background:linear-gradient(90deg,var(--accent4),#f7971e);"></div></div>
+        </div>
+        <div style="margin-top:12px;padding:12px;background:var(--surface2);border-radius:10px;" id="feedback-text"></div>
+      </div>
+    </div>
+
+    <h3 class="section-title" style="font-size:1.3rem;margin-bottom:16px;">📚 Daily Practice Words</h3>
+    <div class="practice-grid" id="daily-words"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ DICTIONARY PAGE ═══════════════════════ -->
+<div class="page" id="page-dictionary">
+  <div class="container">
+    <h2 class="section-title">📖 Pronunciation Dictionary</h2>
+    <p class="section-subtitle">Search any word for detailed pronunciation guide, meanings, and examples.</p>
+
+    <div class="dict-search-row">
+      <input class="word-input" id="dict-input" placeholder="Search a word..." style="border-radius:12px;padding:14px 18px;"
+        onkeydown="if(event.key==='Enter')lookupWord()">
+      <button class="btn btn-primary" onclick="lookupWord()">Search 🔍</button>
+    </div>
+
+    <div class="dict-result" id="dict-result">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div class="dict-word" id="dict-word-display"></div>
+          <div class="dict-phonetic" id="dict-phonetic-display"></div>
+          <span class="dict-pos" id="dict-pos-display"></span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-icon" onclick="speakDictWord()" title="Hear pronunciation">▶</button>
+          <button class="btn btn-icon" style="background:var(--surface2);color:var(--text);" onclick="speakDictWordSlow()" title="Slow pronunciation">🐢</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="dict-section">
+        <h4>Syllable Breakdown</h4>
+        <div class="syllable-display" id="dict-syllables"></div>
+      </div>
+
+      <div class="dict-section">
+        <h4>Definitions</h4>
+        <div id="dict-definitions"></div>
+      </div>
+
+      <div class="dict-section">
+        <h4>Example Sentences</h4>
+        <div id="dict-examples"></div>
+      </div>
+
+      <div class="dict-section">
+        <h4>Memory Tip</h4>
+        <div id="dict-tip" style="padding:12px;background:var(--glow);border-radius:10px;border:1px solid rgba(108,99,255,0.2);font-size:0.9rem;color:var(--text2);"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <h3 style="font-family:'Fraunces',serif;font-size:1.3rem;margin-bottom:16px;">🔤 Tricky Words A-Z</h3>
+    <div id="az-words" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ EXERCISES PAGE ═══════════════════════ -->
+<div class="page" id="page-exercises">
+  <div class="container">
+    <h2 class="section-title">💪 Communication Exercises</h2>
+    <p class="section-subtitle">Targeted exercises to improve your accent, fluency, and confidence.</p>
+
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card"><div class="num" id="stat-streak">0 <span class="streak-fire">🔥</span></div><div class="lbl">Day Streak</div></div>
+      <div class="stat-card"><div class="num" id="stat-words">0</div><div class="lbl">Words Practiced</div></div>
+      <div class="stat-card"><div class="num" id="stat-sessions">0</div><div class="lbl">Sessions Done</div></div>
+      <div class="stat-card"><div class="num" id="stat-score">--</div><div class="lbl">Avg. Score</div></div>
+    </div>
+
+    <div class="accent-tabs">
+      <button class="accent-tab active" onclick="setExerciseTab('tongue', this)">👅 Tongue Twisters</button>
+      <button class="accent-tab" onclick="setExerciseTab('minimal', this)">👂 Minimal Pairs</button>
+      <button class="accent-tab" onclick="setExerciseTab('vowels', this)">🔡 Vowel Drills</button>
+      <button class="accent-tab" onclick="setExerciseTab('confidence', this)">🦁 Confidence</button>
+    </div>
+
+    <div class="exercise-list" id="exercise-list"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ STATE ═══
+let currentLang = 'en';
+let currentSpeed = 1;
+let currentWord = '';
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let recognition = null;
+let waveInterval = null;
+let stats = JSON.parse(localStorage.getItem('vc_stats') || '{"streak":1,"words":12,"sessions":3,"scores":[78,82,85]}');
+
+// ═══ DATA ═══
+const WORDS_DB = {
+  know: { phonetic: '/noʊ/', syllables: ['know'], pos: 'verb', definitions: ['To be aware of through observation or inquiry.', 'To have knowledge or information about.'], examples: ['I know the answer.', 'Do you know her name?', 'He knows how to speak English well.'], tip: 'The "kn" in English is always silent — say just "no". Like: knight, knife, knock.' },
+  wednesday: { phonetic: '/ˈwɛnzdeɪ/', syllables: ['Wednes', 'day'], pos: 'noun', definitions: ['The fourth day of the week, between Tuesday and Thursday.'], examples: ['We have a meeting on Wednesday.', 'Wednesday is the middle of the week.'], tip: 'Pronounce it "WENZ-day" — the middle letters are silent!' },
+  colonel: { phonetic: '/ˈkɜːrnəl/', syllables: ['col', 'o', 'nel'], pos: 'noun', definitions: ['A senior military officer, above a lieutenant colonel.'], examples: ['Colonel Ahmed led the team.', 'The colonel gave the orders.'], tip: 'Spelled "colonel" but sounds like "KERNAL" — totally irregular!' },
+  island: { phonetic: '/ˈaɪlənd/', syllables: ['is', 'land'], pos: 'noun', definitions: ['A piece of land surrounded by water.'], examples: ['They visited a tropical island.', 'The island was beautiful.'], tip: 'The "s" is completely silent — say "EYE-land".' },
+  queue: { phonetic: '/kjuː/', syllables: ['queue'], pos: 'noun', definitions: ['A line of people or vehicles waiting their turn.', 'A sequence of data items waiting to be processed.'], examples: ['There was a long queue at the bank.', 'Please join the queue.'], tip: 'Five letters, but only the "Q" sounds! Pronounce it exactly like the letter "Q".' },
+  receipt: { phonetic: '/rɪˈsiːt/', syllables: ['re', 'ceipt'], pos: 'noun', definitions: ['A written or printed acknowledgment of having received money or goods.'], examples: ['Keep your receipt for returns.', 'He showed the receipt to the cashier.'], tip: 'The "p" is silent! Say "reh-SEET".' },
+  debt: { phonetic: '/dɛt/', syllables: ['debt'], pos: 'noun', definitions: ['Something owed, typically money.', 'The state of owing money.'], examples: ['He paid off his debt.', 'Try to avoid debt.'], tip: 'Silent "b" — say "DET" not "debt" with a b sound.' },
+  subtle: { phonetic: '/ˈsʌtəl/', syllables: ['sub', 'tle'], pos: 'adjective', definitions: ['Delicate or difficult to notice.', 'Making use of clever and indirect methods.'], examples: ['There is a subtle difference.', 'Her hint was very subtle.'], tip: 'Silent "b" again! Say "SUT-ul".' },
+  february: { phonetic: '/ˈfɛbjuˌɛri/', syllables: ['Feb', 'ru', 'a', 'ry'], pos: 'noun', definitions: ['The second month of the year.'], examples: ['Valentine\'s Day is in February.', 'February is the shortest month.'], tip: 'The first "r" is often dropped in speech — "FEB-yoo-air-ee".' },
+  chaos: { phonetic: '/ˈkeɪɒs/', syllables: ['cha', 'os'], pos: 'noun', definitions: ['Complete disorder and confusion.'], examples: ['The room was in total chaos.', 'Traffic chaos blocked the road.'], tip: 'Starts like "K" sound — "KAY-os" not "CHAY-os".' },
+};
+
+const URDU_PHRASES = {
+  'کیا حال ہے': { phonetic: 'Kya haal hai?', meaning: 'How are you?', audio_text: 'Kya haal hai' },
+  'شکریہ': { phonetic: 'Shukria', meaning: 'Thank you', audio_text: 'Shukria' },
+  'السلام علیکم': { phonetic: 'Assalamu Alaikum', meaning: 'Peace be upon you (greeting)', audio_text: 'Assalamu Alaikum' },
+  'خوش آمدید': { phonetic: 'Khush Aamdeed', meaning: 'Welcome', audio_text: 'Khush Aamdeed' },
+};
+
+const SENTENCES = [
+  { text: "She sells seashells by the seashore.", phonetic: "/ʃiː sɛlz ˈsiːʃɛlz baɪ ðə ˈsiːʃɔːr/", level: "medium" },
+  { text: "I know the answer to your question.", phonetic: "/aɪ noʊ ðə ˈænsər tuː jɔːr ˈkwɛstʃən/", level: "easy" },
+  { text: "Wednesday is my favourite day of the week.", phonetic: "/ˈwɛnzdeɪ ɪz maɪ ˈfeɪvərɪt deɪ/", level: "medium" },
+  { text: "The colonel received a receipt for the island.", phonetic: "/ðə ˈkɜːrnəl rɪˈsiːvd ə rɪˈsiːt/", level: "hard" },
+  { text: "How much wood would a woodchuck chuck?", phonetic: "/haʊ mʌtʃ wʊd wʊd ə ˈwʊdtʃʌk tʃʌk/", level: "medium" },
+  { text: "Communication is the key to confidence.", phonetic: "/kəˌmjuːnɪˈkeɪʃən ɪz ðə kiː tuː ˈkɒnfɪdəns/", level: "easy" },
+  { text: "The unique New York phenomenon is extraordinary.", phonetic: "/ðə juːˈniːk njuː jɔːrk fɪˈnɒmɪnən ɪz ɪkˈstrɔːrdɪnəri/", level: "hard" },
+];
+
+const TONGUE_TWISTERS = [
+  { title: "Peter Piper", text: "Peter Piper picked a peck of pickled peppers.", tip: "Focus on 'p' sounds — bilabial plosive practice" },
+  { title: "Th Drill", text: "The thirty-three thieves thought that they thrilled the throne throughout Thursday.", tip: "Practice the 'th' sound — tongue between teeth" },
+  { title: "Red Lorry", text: "Red lorry, yellow lorry — repeat 5 times fast!", tip: "Distinguishes 'l' and 'r' sounds" },
+  { title: "Betty Botter", text: "Betty Botter bought some butter, but she said the butter's bitter.", tip: "B and T sound precision" },
+  { title: "Six Slippery Snails", text: "Six slippery snails slid slowly seaward.", tip: "S sound — great for English fluency" },
+];
+
+const MINIMAL_PAIRS = [
+  { word1: "ship", word2: "sheep", p1: "/ʃɪp/", p2: "/ʃiːp/", tip: "Short 'i' vs long 'ee' — common confusion for Urdu speakers" },
+  { word1: "live", word2: "leave", p1: "/lɪv/", p2: "/liːv/", tip: "Short vowel vs long vowel" },
+  { word1: "think", word2: "sink", p1: "/θɪŋk/", p2: "/sɪŋk/", tip: "Th sound vs S sound" },
+  { word1: "vine", word2: "wine", p1: "/vaɪn/", p2: "/waɪn/", tip: "V vs W — important distinction" },
+  { word1: "bit", word2: "beat", p1: "/bɪt/", p2: "/biːt/", tip: "Short I vs long EE" },
+];
+
+const CONFIDENCE_EXERCISES = [
+  { title: "Mirror Talk", text: "Stand in front of a mirror and introduce yourself for 2 minutes.", tip: "Eye contact, body language, and speech together" },
+  { title: "Shadowing", text: "Listen to a TED Talk sentence, pause, and repeat exactly. Match the rhythm.", tip: "Most powerful accent improvement technique" },
+  { title: "Read Aloud", text: "Read any paragraph from a book or article out loud, clearly and slowly.", tip: "5 minutes daily transforms your fluency" },
+  { title: "Record Yourself", text: "Record a 1-minute talk about your day, then listen and note improvements.", tip: "Self-awareness is the first step to improvement" },
+];
+
+const DAILY_WORDS = [
+  { word: "Pronunciation", phonetic: "/prəˌnʌnsɪˈeɪʃən/", meaning: "The way in which a word is pronounced", difficulty: "hard" },
+  { word: "February", phonetic: "/ˈfɛbjuˌɛri/", meaning: "The second month of the year", difficulty: "medium" },
+  { word: "Particularly", phonetic: "/pəˈtɪkjʊlərli/", meaning: "To a higher degree than is usual", difficulty: "hard" },
+  { word: "Comfortable", phonetic: "/ˈkʌmftəbəl/", meaning: "Providing physical ease and relaxation", difficulty: "medium" },
+  { word: "Entrepreneur", phonetic: "/ˌɒntrəprəˈnɜːr/", meaning: "A person who starts their own business", difficulty: "hard" },
+  { word: "Genuine", phonetic: "/ˈdʒɛnjuɪn/", meaning: "Truly what something is said to be", difficulty: "easy" },
+  { word: "Colleague", phonetic: "/ˈkɒliːɡ/", meaning: "A person with whom one works", difficulty: "easy" },
+];
+
+const AZ_TRICKY = ["aisle","archaeology","beautiful","colonel","debt","entrepreneur","February","gauge","heir","island","jealous","knowledge","lieutenant","mnemonics","necessary","oughtn't","pneumonia","queue","receipt","schedule","tsunami","unique","vegetable","Wednesday","xenophobia","yacht","zealous"];
+
+// ═══ INIT ═══
+window.onload = () => {
+  loadDailyWord();
+  buildCommonWords();
+  buildDailyWords();
+  buildAZWords();
+  buildExercises('tongue');
+  loadNewSentence();
+  updateStats();
+};
+
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  document.querySelector('.theme-btn').textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══ PRONUNCIATION CHECKER ═══
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.getElementById('lang-ur').classList.toggle('active', lang === 'ur');
+  const inp = document.getElementById('checker-input');
+  inp.placeholder = lang === 'en'
+    ? "Type a word or sentence here... (e.g. 'know', 'Wednesday', 'colonel')"
+    : "اردو لفظ یا جملہ لکھیں... (مثلاً: شکریہ، کیا حال ہے)";
+  inp.dir = lang === 'ur' ? 'rtl' : 'ltr';
+}
+
+function setSpeed(s, btn) {
+  currentSpeed = s;
+  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function checkPronunciation() {
+  const input = document.getElementById('checker-input').value.trim();
+  if (!input) { showToast('Please type a word or sentence!'); return; }
+  const status = document.getElementById('status-msg');
+  currentWord = input;
+
+  status.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span> Looking up pronunciation...';
+
+  setTimeout(() => {
+    status.textContent = '';
+    if (currentLang === 'ur') {
+      showUrduResult(input);
+    } else {
+      showEnglishResult(input);
+    }
+    stats.words++;
+    saveStats();
+  }, 600);
+}
+
+function showEnglishResult(input) {
+  const key = input.toLowerCase().trim();
+  const data = WORDS_DB[key];
+  const result = document.getElementById('checker-result');
+
+  const phonetic = data ? data.phonetic : generatePhonetic(input);
+  const syllables = data ? data.syllables : splitSyllables(input);
+  const meaning = data ? data.definitions[0] : 'Audio playback available — click ▶ to hear the pronunciation.';
+  const examples = data ? data.examples : [`"${input}" — click ▶ to hear this word spoken.`];
+
+  document.getElementById('phonetic-display').textContent = phonetic;
+  document.getElementById('syllable-display').textContent = syllables.join(' · ');
+  document.getElementById('meaning-display').textContent = meaning;
+
+  const exList = document.getElementById('example-list');
+  exList.innerHTML = examples.map(e =>
+    `<div class="example-item" onclick="speakSentence('${e.replace(/'/g,"\\'")}')">▶ ${e}</div>`
+  ).join('');
+
+  buildWaveBars('wave-bars', 40);
+  result.classList.add('show');
+  speakText();
+}
+
+function showUrduResult(input) {
+  const data = URDU_PHRASES[input];
+  const result = document.getElementById('checker-result');
+
+  const phonetic = data ? data.phonetic : romanizeUrdu(input);
+  const meaning = data ? data.meaning : 'Urdu phrase — click ▶ to hear the pronunciation.';
+
+  document.getElementById('phonetic-display').textContent = phonetic;
+  document.getElementById('syllable-display').textContent = 'Roman Urdu: ' + phonetic;
+  document.getElementById('meaning-display').textContent = meaning;
+
+  const exList = document.getElementById('example-list');
+  exList.innerHTML = `<div class="example-item" onclick="speakUrdu('${input}')">▶ ${input} — ${meaning}</div>`;
+
+  buildWaveBars('wave-bars', 40);
+  result.classList.add('show');
+  speakUrdu(input);
+}
+
+function generatePhonetic(word) {
+  const map = { 'ough':'/ʌf/', 'ph':'/f/', 'th':'/θ/', 'sh':'/ʃ/', 'ch':'/tʃ/', 'wh':'/w/', 'ck':'/k/', 'tion':'/ʃən/', 'ture':'/tʃər/' };
+  let ph = '/' + word + '/';
+  for (const [k,v] of Object.entries(map)) ph = ph.replace(new RegExp(k,'gi'), v);
+  return ph;
+}
+
+function splitSyllables(word) {
+  const vowels = 'aeiouAEIOU';
+  const syllables = [];
+  let current = '';
+  for (let i = 0; i < word.length; i++) {
+    current += word[i];
+    if (vowels.includes(word[i]) && i < word.length - 1 && !vowels.includes(word[i+1])) {
+      if (i + 2 < word.length) { syllables.push(current); current = ''; }
+    }
+  }
+  if (current) syllables.push(current);
+  return syllables.length > 0 ? syllables : [word];
+}
+
+function romanizeUrdu(text) {
+  const map = {'ا':'a','ب':'b','پ':'p','ت':'t','ٹ':'t','ث':'s','ج':'j','چ':'ch','ح':'h','خ':'kh','د':'d','ڈ':'d','ذ':'z','ر':'r','ڑ':'r','ز':'z','ژ':'zh','س':'s','ش':'sh','ص':'s','ض':'z','ط':'t','ظ':'z','ع':'a','غ':'gh','ف':'f','ق':'q','ک':'k','گ':'g','ل':'l','م':'m','ن':'n','و':'w','ہ':'h','ی':'y','ے':'e','ء':'\''};
+  return text.split('').map(c => map[c] || c).join('').replace(/\s+/g,' ').trim() || text;
+}
+
+function speakText() {
+  const input = document.getElementById('checker-input').value.trim();
+  if (!input) return;
+  speak(input, currentLang === 'ur' ? 'ur-PK' : 'en-US', currentSpeed);
+}
+
+function speakSentence(text) { speak(text, 'en-US', currentSpeed); }
+function speakUrdu(text) { speak(text, 'ur-PK', 1); }
+function speakDictWord() { speak(document.getElementById('dict-input').value, 'en-US', 1); }
+function speakDictWordSlow() { speak(document.getElementById('dict-input').value, 'en-US', 0.5); }
+function speakPractice() { const s = SENTENCES.find(s=>s.text===document.getElementById('practice-sentence').textContent); if(s) speak(s.text,'en-US',1); }
+function speakPracticeSlow() { const s = SENTENCES.find(s=>s.text===document.getElementById('practice-sentence').textContent); if(s) speak(s.text,'en-US',0.5); }
+
+function speak(text, lang, rate) {
+  if (!('speechSynthesis' in window)) { showToast('Text-to-speech not supported in your browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang || 'en-US';
+  u.rate = rate || 1;
+  u.pitch = 1;
+  const voices = window.speechSynthesis.getVoices();
+  const langVoice = voices.find(v => v.lang.startsWith(lang?.split('-')[0] || 'en'));
+  if (langVoice) u.voice = langVoice;
+  window.speechSynthesis.speak(u);
+  animateWave('wave-bars');
+}
+
+function copyPhonetic() {
+  const ph = document.getElementById('phonetic-display').textContent;
+  if (ph) { navigator.clipboard.writeText(ph).then(() => showToast('Phonetic copied! ' + ph)); }
+}
+
+function buildCommonWords() {
+  const container = document.getElementById('common-words');
+  Object.keys(WORDS_DB).forEach(word => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn';
+    btn.textContent = word;
+    btn.style.marginBottom = '4px';
+    btn.onclick = () => {
+      document.getElementById('checker-input').value = word;
+      checkPronunciation();
+    };
+    container.appendChild(btn);
+  });
+}
+
+// ═══ DICTIONARY ═══
+function lookupWord() {
+  const w = document.getElementById('dict-input').value.trim().toLowerCase();
+  if (!w) { showToast('Please enter a word to search.'); return; }
+  const data = WORDS_DB[w];
+  const result = document.getElementById('dict-result');
+
+  const phonetic = data ? data.phonetic : generatePhonetic(w);
+  const syllables = data ? data.syllables : splitSyllables(w);
+  const pos = data ? data.pos : 'noun';
+  const defs = data ? data.definitions : ['Definition: Click ▶ to hear how this word is pronounced.'];
+  const examples = data ? data.examples : [`Use "${w}" in a sentence.`];
+  const tip = data ? data.tip : `Break it into syllables: ${splitSyllables(w).join(' - ')} and practice each part slowly.`;
+
+  document.getElementById('dict-word-display').textContent = w;
+  document.getElementById('dict-phonetic-display').textContent = phonetic;
+  document.getElementById('dict-pos-display').textContent = pos;
+
+  const sylDiv = document.getElementById('dict-syllables');
+  sylDiv.innerHTML = syllables.map((s,i) => `<span class="syllable ${i===0?'stressed':''}">${s}</span>`).join('<span style="color:var(--text3);padding:0 4px">·</span>');
+
+  document.getElementById('dict-definitions').innerHTML = defs.map(d => `<div class="dict-def">${d}</div>`).join('');
+  document.getElementById('dict-examples').innerHTML = examples.map(e =>
+    `<div class="dict-example" onclick="speak('${e.replace(/'/g,"\\'")}','en-US',1)" style="cursor:pointer;">▶ ${e}</div>`
+  ).join('');
+  document.getElementById('dict-tip').textContent = '💡 ' + tip;
+
+  result.classList.add('show');
+  speak(w, 'en-US', 0.8);
+  stats.words++;
+  saveStats();
+}
+
+function buildAZWords() {
+  const container = document.getElementById('az-words');
+  AZ_TRICKY.forEach(word => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn';
+    btn.textContent = word;
+    btn.onclick = () => {
+      document.getElementById('dict-input').value = word;
+      lookupWord();
+      showPage('dictionary', document.querySelector('nav button:nth-child(4)'));
+    };
+    container.appendChild(btn);
+  });
+}
+
+// ═══ SPEECH PRACTICE ═══
+let currentSentenceIdx = 0;
+function loadNewSentence() {
+  currentSentenceIdx = Math.floor(Math.random() * SENTENCES.length);
+  const s = SENTENCES[currentSentenceIdx];
+  document.getElementById('practice-sentence').textContent = s.text;
+  document.getElementById('practice-phonetic').textContent = s.phonetic;
+  document.getElementById('transcript-box').textContent = 'Your speech will appear here as you speak...';
+  document.getElementById('scores-section').style.display = 'none';
+}
+
+function buildDailyWords() {
+  const container = document.getElementById('daily-words');
+  DAILY_WORDS.forEach(w => {
+    const div = document.createElement('div');
+    div.className = 'practice-item';
+    div.innerHTML = `
+      <span class="tag tag-${w.difficulty}">${w.difficulty}</span>
+      <h3>${w.word}</h3>
+      <div class="phonetic-small">${w.phonetic}</div>
+      <p>${w.meaning}</p>
+    `;
+    div.onclick = () => {
+      speak(w.word, 'en-US', 0.8);
+      showToast('▶ Playing: ' + w.word + ' ' + w.phonetic);
+      stats.words++;
+      saveStats();
+    };
+    container.appendChild(div);
+  });
+}
+
+function toggleRecording() {
+  if (isRecording) stopRecording();
+  else startRecording();
+}
+
+function startRecording() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast('Speech recognition not available. Try Chrome browser!');
+    simulateRecording();
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.continuous = false;
+
+  recognition.onresult = (e) => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    document.getElementById('transcript-box').textContent = transcript;
+    if (e.results[0].isFinal) {
+      const target = SENTENCES[currentSentenceIdx].text.toLowerCase();
+      const spoken = transcript.toLowerCase();
+      evaluateSpeech(target, spoken);
+    }
+  };
+  recognition.onerror = () => { stopRecording(); simulateScore(); };
+  recognition.onend = () => { if (isRecording) stopRecording(); };
+  recognition.start();
+
+  isRecording = true;
+  document.getElementById('mic-btn').classList.add('recording');
+  document.getElementById('mic-btn').textContent = '⏹';
+  document.getElementById('mic-label').textContent = '🔴 Recording... speak now!';
+  document.getElementById('record-wave').style.display = 'flex';
+  buildWaveBars('record-bars', 50);
+  animateWave('record-bars');
+  let secs = 0;
+  waveInterval = setInterval(() => {
+    secs++;
+    document.getElementById('recording-timer').textContent = '⏱ ' + secs + 's';
+  }, 1000);
+}
+
+function stopRecording() {
+  isRecording = false;
+  if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('mic-btn').textContent = '🎙️';
+  document.getElementById('mic-label').textContent = 'Tap to start recording your pronunciation';
+  document.getElementById('recording-timer').textContent = '';
+  clearInterval(waveInterval);
+  stopWaveAnimation('record-bars');
+}
+
+function simulateRecording() {
+  isRecording = true;
+  document.getElementById('mic-btn').classList.add('recording');
+  document.getElementById('mic-btn').textContent = '⏹';
+  document.getElementById('mic-label').textContent = '🔴 Recording... speak now!';
+  document.getElementById('record-wave').style.display = 'flex';
+  buildWaveBars('record-bars', 50);
+  animateWave('record-bars');
+  setTimeout(() => {
+    stopRecording();
+    const target = SENTENCES[currentSentenceIdx].text;
+    document.getElementById('transcript-box').textContent = target;
+    simulateScore();
+  }, 3000);
+}
+
+function simulateScore() {
+  const acc = 70 + Math.floor(Math.random() * 25);
+  const flu = 65 + Math.floor(Math.random() * 30);
+  const com = 80 + Math.floor(Math.random() * 20);
+  showScores(acc, flu, com);
+}
+
+function evaluateSpeech(target, spoken) {
+  const targetWords = target.split(' ');
+  const spokenWords = spoken.split(' ');
+  const matches = targetWords.filter(w => spokenWords.includes(w)).length;
+  const acc = Math.round((matches / targetWords.length) * 100);
+  const flu = Math.min(100, acc + Math.floor(Math.random() * 10));
+  const com = Math.round((spokenWords.length / targetWords.length) * 100);
+  showScores(acc, flu, Math.min(100, com));
+}
+
+function showScores(acc, flu, com) {
+  const avg = Math.round((acc + flu + com) / 3);
+  stats.scores.push(avg);
+  stats.sessions++;
+  saveStats();
+  updateStats();
+
+  document.getElementById('score-acc').textContent = acc + '%';
+  document.getElementById('score-flu').textContent = flu + '%';
+  document.getElementById('score-com').textContent = com + '%';
+  document.getElementById('bar-acc').style.width = acc + '%';
+  document.getElementById('bar-flu').style.width = flu + '%';
+  document.getElementById('bar-com').style.width = com + '%';
+
+  let fb = avg >= 85 ? '🎉 Excellent! Your pronunciation is very clear and natural.'
+         : avg >= 70 ? '👍 Good job! Keep practicing — you\'re improving steadily.'
+         : avg >= 50 ? '💪 Keep going! Try speaking more slowly and clearly.'
+                    : '🌱 Great start! Listen to the example, then try again slowly.';
+  document.getElementById('feedback-text').innerHTML = `<strong>Score: ${avg}/100</strong> — ${fb}`;
+  document.getElementById('scores-section').style.display = 'block';
+}
+
+// ═══ EXERCISES ═══
+function setExerciseTab(type, btn) {
+  document.querySelectorAll('.accent-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildExercises(type);
+}
+
+function buildExercises(type) {
+  const list = document.getElementById('exercise-list');
+  let items = [];
+
+  if (type === 'tongue') items = TONGUE_TWISTERS.map(t => ({
+    title: t.title, text: t.text, tip: t.tip,
+    action1: () => speak(t.text, 'en-US', 0.7),
+    action2: () => speak(t.text, 'en-US', 1)
+  }));
+  else if (type === 'minimal') items = MINIMAL_PAIRS.map(p => ({
+    title: `"${p.word1}" vs "${p.word2}"`,
+    text: `${p.p1} vs ${p.p2} — ${p.tip}`,
+    tip: p.tip,
+    action1: () => { speak(p.word1, 'en-US', 0.7); setTimeout(() => speak(p.word2, 'en-US', 0.7), 1500); },
+    action2: () => { speak(p.word1, 'en-US', 1); setTimeout(() => speak(p.word2, 'en-US', 1), 800); }
+  }));
+  else if (type === 'vowels') {
+    const vowelDrills = [
+      { title: "Short 'i' vs Long 'ee'", text: "bit — beat — bit — beat — ship — sheep", tip: "Feel the difference: short 'i' is relaxed, long 'ee' stretches your lips" },
+      { title: "Short 'a' vs Long 'ay'", text: "cat — cate — bat — bait — hat — hate", tip: "Short 'a' is open, long 'ay' has a glide at the end" },
+      { title: "The Schwa /ə/ Sound", text: "about — taken — pencil — careful — famous", tip: "The most common vowel in English! Every unstressed syllable uses it." },
+      { title: "Pure 'o' Sound", text: "go — no — so — flow — know — show", tip: "Round your lips for this sound" },
+    ];
+    items = vowelDrills.map(d => ({
+      title: d.title, text: d.text, tip: d.tip,
+      action1: () => speak(d.text, 'en-US', 0.6),
+      action2: () => speak(d.text, 'en-US', 1)
+    }));
+  }
+  else if (type === 'confidence') items = CONFIDENCE_EXERCISES.map(c => ({
+    title: c.title, text: c.text, tip: c.tip,
+    action1: () => { speak(c.text, 'en-US', 0.8); showToast('Exercise started! ' + c.tip); },
+    action2: () => showToast('Tip: ' + c.tip)
+  }));
+
+  list.innerHTML = '';
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'exercise-item';
+    div.innerHTML = `
+      <div class="exercise-text">
+        <h3>${item.title}</h3>
+        <p>${item.text}</p>
+        <p style="margin-top:6px;color:var(--accent3);font-size:0.8rem;">💡 ${item.tip}</p>
+      </div>
+      <div class="exercise-actions">
+        <button class="btn btn-icon" title="Slow practice" style="font-size:0.85rem;">🐢</button>
+        <button class="btn btn-icon green" title="Normal speed" style="font-size:0.85rem;">▶</button>
+      </div>
+    `;
+    div.querySelectorAll('.btn-icon')[0].onclick = item.action1;
+    div.querySelectorAll('.btn-icon')[1].onclick = item.action2;
+    list.appendChild(div);
+  });
+}
+
+// ═══ WORD OF THE DAY ═══
+function loadDailyWord() {
+  const words = Object.keys(WORDS_DB);
+  const todayIdx = new Date().getDate() % words.length;
+  const word = words[todayIdx];
+  const data = WORDS_DB[word];
+  const container = document.getElementById('wotd-content');
+  container.innerHTML = `
+    <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-family:'Fraunces',serif;font-size:2rem;font-weight:700;margin-bottom:4px;">${word}</div>
+        <div style="font-family:'Fraunces',serif;font-style:italic;color:var(--accent);font-size:1.1rem;margin-bottom:12px;">${data.phonetic}</div>
+        <div class="chip chip-accent" style="margin-bottom:12px;">${data.syllables.join(' · ')}</div>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.6;margin-bottom:12px;">${data.definitions[0]}</p>
+        <p style="color:var(--text2);font-size:0.88rem;font-style:italic;">📝 ${data.examples[0]}</p>
+        <p style="color:var(--accent3);font-size:0.85rem;margin-top:8px;">💡 ${data.tip}</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button class="btn btn-primary" onclick="speak('${word}','en-US',1)">▶ Hear It</button>
+        <button class="btn btn-secondary" onclick="speak('${word}','en-US',0.5)">🐢 Slow</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('checker-input').value='${word}';showPage('checker',document.querySelector('nav button:nth-child(2)'));checkPronunciation();">Practice</button>
+      </div>
+    </div>
+  `;
+}
+
+// ═══ WAVE ANIMATION ═══
+function buildWaveBars(containerId, count) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'wave-bar';
+    bar.style.height = '4px';
+    bar.dataset.idx = i;
+    container.appendChild(bar);
+  }
+}
+
+let waveAnimFrame;
+function animateWave(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const bars = container.querySelectorAll('.wave-bar');
+  let frame = 0;
+  function step() {
+    bars.forEach((bar, i) => {
+      const h = 10 + 30 * Math.abs(Math.sin((frame + i * 3) * 0.15));
+      bar.style.height = h + 'px';
+    });
+    frame++;
+    waveAnimFrame = requestAnimationFrame(step);
+  }
+  step();
+  setTimeout(() => stopWaveAnimation(containerId), 4000);
+}
+
+function stopWaveAnimation(containerId) {
+  cancelAnimationFrame(waveAnimFrame);
+  const container = document.getElementById(containerId);
+  if (container) container.querySelectorAll('.wave-bar').forEach(b => b.style.height = '4px');
+}
+
+// ═══ STATS ═══
+function saveStats() { localStorage.setItem('vc_stats', JSON.stringify(stats)); }
+function updateStats() {
+  const avg = stats.scores.length ? Math.round(stats.scores.reduce((a,b)=>a+b,0)/stats.scores.length) : '--';
+  document.getElementById('stat-streak').innerHTML = stats.streak + ' <span class="streak-fire">🔥</span>';
+  document.getElementById('stat-words').textContent = stats.words;
+  document.getElementById('stat-sessions').textContent = stats.sessions;
+  document.getElementById('stat-score').textContent = avg + (avg !== '--' ? '%' : '');
+}
+
+// Pre-load voices
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
+</script>
+</body>
+</html>
