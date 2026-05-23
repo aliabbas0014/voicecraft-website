@@ -489,7 +489,7 @@ html,body{height:100%;font-family:'Geist',sans-serif;background:var(--bg);color:
   <p class="hero-sub">Type any English or Urdu word and instantly hear the correct pronunciation with phonetics, meanings, and example sentences.</p>
 
   <div class="hero-search">
-    <textarea class="hero-input" id="hero-input" rows="1" placeholder="Type a word… e.g. know, Wednesday, colonel"
+    <textarea class="hero-input" id="hero-input" rows="1" placeholder="Type a word…"
       oninput="autoResize(this)"
       onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();heroSearch()}"></textarea>
     <button class="hero-submit" id="hero-submit" onclick="heroSearch()">↑</button>
@@ -794,7 +794,7 @@ function setLang(l,btn){
   document.getElementById('l-en').classList.toggle('on',l==='en');
   document.getElementById('l-ur').classList.toggle('on',l==='ur');
   const hi=document.getElementById('hero-input');
-  hi.placeholder=l==='ur'?'اردو لفظ لکھیں… مثلاً: شکریہ':'Type a word… e.g. know, Wednesday, colonel';
+  hi.placeholder=l==='ur'?'اردو لفظ لکھیں… مثلاً: شکریہ':'Type a word…';
   hi.dir=l==='ur'?'rtl':'ltr';
   const ti=document.getElementById('topbar-input');
   ti.placeholder=l==='ur'?'اردو لفظ تلاش کریں…':'Search another word…';
